@@ -51,7 +51,6 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {

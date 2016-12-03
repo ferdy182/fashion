@@ -3,11 +3,12 @@ package com.fernandofgallego.stylight.view.main;
 import android.support.v4.app.Fragment;
 import com.fernandofgallego.stylight.Constants;
 import com.fernandofgallego.stylight.model.adapters.EntriesAdapter;
-import com.fernandofgallego.stylight.model.adapters.Rendereable;
-import com.fernandofgallego.stylight.model.adapters.RendereablePost;
 import com.fernandofgallego.stylight.model.datasource.PostsDataSource;
 import com.fernandofgallego.stylight.model.datasource.PostsRepository;
+import com.fernandofgallego.stylight.model.datasource.ProductsDataSource;
+import com.fernandofgallego.stylight.model.datasource.ProductsRepository;
 import com.fernandofgallego.stylight.model.entities.Posts;
+import com.fernandofgallego.stylight.model.entities.Products;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,17 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void loadProducts(int category, int amount) {
+        ProductsRepository.INSTANCE.getProducts(category, amount, new ProductsDataSource.LoadProductsCallback() {
+            @Override
+            public void onProductsLoaded(Products Products) {
+
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
 
     }
 
@@ -49,6 +61,7 @@ public class MainPresenter implements MainContract.Presenter {
             }
         });
     }
+
 
 
 }
