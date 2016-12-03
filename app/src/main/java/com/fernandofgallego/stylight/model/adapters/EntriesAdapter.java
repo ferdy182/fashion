@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.fernandofgallego.stylight.R;
-import com.fernandofgallego.stylight.model.entities.Products;
+import com.fernandofgallego.stylight.model.entities.Post;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,22 +27,26 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private List<Rendereable> items = new ArrayList<>();
 
-    private EntriesAdapter(List<Rendereable> items, Fragment host, boolean horizontal) {
+    private EntriesAdapter(List<Object> items, Fragment host, boolean horizontal) {
         this.layoutInflater = LayoutInflater.from(host.getContext());
         this.host = host;
         this.horizontal = horizontal;
         this.items = processItems(items);
     }
 
-    private List<Rendereable> processItems(List<Rendereable> items) {
-        return items;
+    private List<Rendereable> processItems(List<Object> items) {
+        List<Rendereable> rendereables = new ArrayList<>();
+        for(Object object : items) {
+            rendereables.add(RendereablePost.wrap((Post) object));
+        }
+        return rendereables;
     }
 
-    public static EntriesAdapter createHorizontal(Fragment fragment, final List<Rendereable> items) {
+    public static EntriesAdapter createHorizontal(Fragment fragment, final List<Object> items) {
         return new EntriesAdapter(items, fragment, true);
     }
 
-    public static EntriesAdapter createVertical(Fragment fragment, final List<Rendereable> items) {
+    public static EntriesAdapter createVertical(Fragment fragment, final List<Object> items) {
         return new EntriesAdapter(items, fragment, false);
     }
 
@@ -54,17 +58,21 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_HEADER:
                 return createHeaderViewHolder(parent);
             case TYPE_POST:
-                return createCadViewHolder(parent, R.layout.card_horizontal);
+                return createPostViewHolder(parent, R.layout.card_horizontal);
             case TYPE_PRODUCT:
-                return createCadViewHolder(parent, R.layout.card_vertical);
+                return createProductViewHolder(parent, R.layout.card_vertical);
             default:
                 throw new IllegalArgumentException("Unknown view type");
         }
 
     }
 
-    private EntryViewHolder createCadViewHolder(ViewGroup parent, int layout) {
-        return new EntryViewHolder(layoutInflater.inflate(layout, parent, false));
+    private ProductViewHolder createProductViewHolder(ViewGroup parent, int layout) {
+        return new ProductViewHolder(layoutInflater.inflate(layout, parent, false));
+    }
+
+    private PostViewHolder createPostViewHolder(ViewGroup parent, int layout) {
+        return new PostViewHolder(layoutInflater.inflate(layout, parent, false));
     }
 
     private HeaderViewHolder createHeaderViewHolder(ViewGroup parent) {
@@ -78,10 +86,10 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 bindHeader((HeaderViewHolder)holder, (ListHeader) items.get(position));
                 break;
             case TYPE_POST:
-                bindEntry((EntryViewHolder)holder, items.get(position));
+                bindPost((PostViewHolder) holder, (RendereablePost) items.get(position));
                 break;
             case TYPE_PRODUCT:
-                bindEntry((EntryViewHolder)holder, items.get(position));
+                bindProduct((ProductViewHolder)holder, (RendereableProduct) items.get(position));
                 break;
         }
     }
@@ -89,14 +97,14 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         final Rendereable item =  items.get(position);
-        if(item instanceof Products) {
+        if(item instanceof RendereableProduct) {
             return TYPE_PRODUCT;
-        } else if (item instanceof Rendereable) {
+        } else if (item instanceof RendereablePost) {
             return TYPE_POST;
-        } else if (item instanceof Rendereable) {
+        } else if (item instanceof ListHeader) {
             return TYPE_HEADER;
         }
-        throw new IllegalArgumentException("Unkown view type");
+        throw new IllegalArgumentException("Unknown view type");
     }
 
     @Override
@@ -109,20 +117,39 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.subheader.setText(header.subtitle);
     }
 
-    private void bindEntry(EntryViewHolder holder, Rendereable post) {
-        holder.textView.setText(post.getTitle());
+    private void bindPost(PostViewHolder holder, RendereablePost post) {
+        holder.title.setText(post.getTitle());
+        holder.body.setText(post.getTitle());
         Picasso.with(holder.imageView.getContext()).load(post.getImageUrl()).into(holder.imageView);
+    }
+
+    private void bindProduct(ProductViewHolder holder, RendereableProduct product) {
+        holder.textView.setText(product.getTitle());
+        Picasso.with(holder.imageView.getContext()).load(product.getImageUrl()).into(holder.imageView);
     }
 
     // region viewholders
 
-    public static class EntryViewHolder extends RecyclerView.ViewHolder {
+    public static class ProductViewHolder extends RecyclerView.ViewHolder {
         AppCompatImageView imageView;
         TextView textView;
 
-        public EntryViewHolder(View itemView) {
+        public ProductViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.info_text);
+            imageView = (AppCompatImageView) itemView.findViewById(R.id.image);
+        }
+    }
+
+    public static class PostViewHolder extends RecyclerView.ViewHolder {
+        AppCompatImageView imageView;
+        TextView title;
+        TextView body;
+
+        public PostViewHolder(View itemView) {
+            super(itemView);
+            title = (TextView) itemView.findViewById(R.id.info_text);
+            body = (TextView) itemView.findViewById(R.id.category_title);
             imageView = (AppCompatImageView) itemView.findViewById(R.id.image);
         }
     }

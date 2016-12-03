@@ -1,7 +1,6 @@
 
 package com.fernandofgallego.stylight.model.entities;
 
-import com.fernandofgallego.stylight.model.adapters.Rendereable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Generated("org.jsonschema2pojo")
-public class Post implements Rendereable{
+public class Post {
 
     @SerializedName("id")
     @Expose
@@ -104,11 +103,6 @@ public class Post implements Rendereable{
      */
     public String getTitle() {
         return title;
-    }
-
-    @Override
-    public String getImageUrl() {
-        return this.teaserImageHorizontal;
     }
 
     /**

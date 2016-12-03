@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import com.fernandofgallego.stylight.Constants;
 import com.fernandofgallego.stylight.model.adapters.EntriesAdapter;
 import com.fernandofgallego.stylight.model.adapters.Rendereable;
+import com.fernandofgallego.stylight.model.adapters.RendereablePost;
 import com.fernandofgallego.stylight.model.datasource.PostsDataSource;
 import com.fernandofgallego.stylight.model.datasource.PostsRepository;
 import com.fernandofgallego.stylight.model.entities.Posts;
@@ -37,7 +38,7 @@ public class MainPresenter implements MainContract.Presenter {
         PostsRepository.INSTANCE.getPosts(category, amount, new PostsDataSource.LoadPostsCallback() {
             @Override
             public void onPostsLoaded(Posts posts) {
-                EntriesAdapter adapter = EntriesAdapter.createHorizontal((Fragment) view, new ArrayList<Rendereable>(posts.getPosts()));
+                EntriesAdapter adapter = EntriesAdapter.createHorizontal((Fragment) view, new ArrayList<Object>(posts.getPosts()));
 //                view.showPosts(posts);
                 view.showData(adapter);
             }
