@@ -1,4 +1,4 @@
-package com.fernandofgallego.stylight.model;
+package com.fernandofgallego.stylight;
 
 public class Constants {
     public static final String API_BASE_URL = " https://api.stylight.com/rest/";

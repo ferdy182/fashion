@@ -1,7 +1,7 @@
 package com.fernandofgallego.stylight.model.api;
 
 import com.fernandofgallego.stylight.BuildConfig;
-import com.fernandofgallego.stylight.model.Constants;
+import com.fernandofgallego.stylight.Constants;
 import com.google.gson.GsonBuilder;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
