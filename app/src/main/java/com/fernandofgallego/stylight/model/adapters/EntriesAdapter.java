@@ -17,10 +17,7 @@ import com.fernandofgallego.stylight.model.entities.Product;
 import com.fernandofgallego.stylight.model.entities.Products;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -48,33 +45,26 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.productsMap = productsMap;
         this.postsMap = postsMap;
 
-        items = new ArrayList<>(4 + 2 + 6);
-        items.add(headers[0]);
-        items.add(productsMap.get(Constants.ID_PRODUCTS_CLOTHING));
-        items.add(headers[1]);
-        items.addAll(postsMap.get(Constants.ID_POSTS_FASHION).getPosts());
-        items.add(headers[2]);
-        items.add(productsMap.get(Constants.ID_PRODUCTS_LAMPS));
-        items.add(headers[3]);
-        items.addAll(postsMap.get(Constants.ID_POSTS_LIFESTYLE).getPosts());
+        items = new ArrayList<>();
+        addItem(items, headers[0], productsMap.get(Constants.ID_PRODUCTS_CLOTHING));
+        addItems(items, headers[1], postsMap.get(Constants.ID_POSTS_FASHION).getPosts());
+        addItem(items, headers[2], productsMap.get(Constants.ID_PRODUCTS_LAMPS));
+        addItems(items, headers[3], postsMap.get(Constants.ID_POSTS_LIFESTYLE).getPosts());
     }
 
-//    private List<Rendereable> processItems(List<Object> items) {
-//        List<Rendereable> rendereables = new ArrayList<>();
-//        for(Object object : items) {
-//            rendereables.add(RendereablePost.wrap((Post) object));
-//        }
-//        return rendereables;
-//    }
+    private void addItem(List<Object> items, ListHeader header, Products item) {
+        if (item != null && item.getProducts().size() > 0) {
+            items.add(header);
+            items.add(item);
+        }
+    }
 
-//    public static EntriesAdapter createHorizontal(Fragment fragment, final List<Object> items) {
-//        return new EntriesAdapter(items, fragment, true);
-//    }
-//
-//    public static EntriesAdapter createVertical(Fragment fragment, final List<Object> items) {
-//        return new EntriesAdapter(items, fragment, false);
-//    }
-
+    private void addItems(List<Object> items, ListHeader header, Collection entries) {
+        if (entries != null && entries.size() > 0) {
+            items.add(header);
+            items.addAll(entries);
+        }
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -120,14 +110,6 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-//        if (position == 0 || position == 2 || position == 6 || position == 8) {
-//            return TYPE_HEADER;
-//        } else if (position == 1 || position == 7) {
-//            return TYPE_PRODUCT;
-//        } else {
-//            return TYPE_POST;
-//        }
-
         final Object item =  items.get(position);
         if(item instanceof Products) {
             return TYPE_PRODUCT;
@@ -141,7 +123,7 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return headers.length + 2 + 6;
+        return items.size();
     }
 
     private void bindHeader(HeaderViewHolder holder, ListHeader header) {
@@ -155,11 +137,6 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Picasso.with(holder.imageView.getContext()).load(post.getTeaserImage()).into(holder.imageView);
     }
 
-//    private void bindProduct(ProductViewHolder holder, RendereableProduct product) {
-//        holder.textView.setText(product.getTitle());
-//        Picasso.with(holder.imageView.getContext()).load(product.getImageUrl()).into(holder.imageView);
-//    }
-
     private void bindProduct(ProductViewHolder holder, Products products) {
         PagerAdapter pagerAdapter = new ProductsPagerAdapter(products);
         holder.pager.setAdapter(pagerAdapter);
@@ -168,14 +145,14 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static class ProductsPagerAdapter extends PagerAdapter {
         Products products;
 
-        public ProductsPagerAdapter(Products products) {
+        ProductsPagerAdapter(Products products) {
             this.products = products;
         }
 
-//        @Override
-//        public float getPageWidth(int position) {
-//            return 400;
-//        }
+        @Override
+        public float getPageWidth(int position) {
+            return 0.45f;
+        }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
@@ -184,7 +161,10 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Product product = products.getProducts().get(position);
 
             TextView textView = (TextView) view.findViewById(R.id.info_text);
-            textView.setText(String.format(Locale.getDefault(), "%s\n%s", product.getName(), product.getPrice()));
+            TextView priceView = (TextView) view.findViewById(R.id.price_text);
+            textView.setText(product.getName());
+            priceView.setText(String.format(Locale.GERMAN,"%.02f %s",
+                    product.getPrice(), product.getCurrency().getSymbol()));
 
             AppCompatImageView imageView = (AppCompatImageView) view.findViewById(R.id.product_image);
 
@@ -215,38 +195,28 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == object;
+            return view.equals(object);
         }
     }
 
     // region viewholders
 
-//    public static class ProductViewHolder extends RecyclerView.ViewHolder {
-//        AppCompatImageView imageView;
-//        TextView textView;
-//
-//        public ProductViewHolder(View itemView) {
-//            super(itemView);
-//            textView = (TextView) itemView.findViewById(R.id.info_text);
-//            imageView = (AppCompatImageView) itemView.findViewById(R.id.image);
-//        }
-//    }
 
-    public static class ProductViewHolder extends RecyclerView.ViewHolder {
+    private static class ProductViewHolder extends RecyclerView.ViewHolder {
         ViewPager pager;
 
-        public ProductViewHolder(View itemView) {
+        ProductViewHolder(View itemView) {
             super(itemView);
             pager = (ViewPager) itemView.findViewById(R.id.pager);
         }
     }
 
-    public static class PostViewHolder extends RecyclerView.ViewHolder {
+    private static class PostViewHolder extends RecyclerView.ViewHolder {
         AppCompatImageView imageView;
         TextView title;
         TextView body;
 
-        public PostViewHolder(View itemView) {
+        PostViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.info_text);
             body = (TextView) itemView.findViewById(R.id.category_title);
@@ -259,7 +229,7 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         final TextView header;
         final TextView subheader;
 
-        public HeaderViewHolder(View itemView) {
+        HeaderViewHolder(View itemView) {
             super(itemView);
             header = (TextView) itemView.findViewById(R.id.card_title);
             subheader = (TextView) itemView.findViewById(R.id.card_subtitle);
@@ -267,16 +237,14 @@ public class EntriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public static class ListHeader {
-
-        public final String title;
-        public final String subtitle;
+        final String title;
+        final String subtitle;
 
         public ListHeader(String title, String subtitle) {
             this.title = title;
             this.subtitle = subtitle;
         }
     }
-
 
     // endregion
 
