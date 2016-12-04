@@ -17,7 +17,6 @@ public class MainContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadProducts(int category, int amount);
-        void loadPosts(String category, int amount);
+        void loadTimeline(String[] postCategories, int postPageItems, int[] productCategories, int productsPageItems);
     }
 }

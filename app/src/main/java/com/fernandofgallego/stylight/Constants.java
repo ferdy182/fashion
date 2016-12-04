@@ -1,5 +1,7 @@
 package com.fernandofgallego.stylight;
 
+import okhttp3.logging.HttpLoggingInterceptor;
+
 public class Constants {
     public static final String API_BASE_URL = " https://api.stylight.com/rest/";
 
@@ -13,4 +15,6 @@ public class Constants {
 
     public static final String ID_POSTS_FASHION = "fashion";
     public static final String ID_POSTS_LIFESTYLE = "lifestyle";
+
+    public static final HttpLoggingInterceptor.Level HTTP_LOG_LEVEL = HttpLoggingInterceptor.Level.BASIC;
 }

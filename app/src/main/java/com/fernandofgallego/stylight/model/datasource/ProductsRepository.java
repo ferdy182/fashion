@@ -12,16 +12,10 @@ public enum ProductsRepository implements ProductsDataSource {
     private ProductsDataSource remoteProductsDataSource;
     private ProductsDataSource localProductsDataSource;
 
-    private ProductsRepository(ProductsDataSource remoteProductsDataSource, ProductsDataSource localProductsDataSource) {
+    ProductsRepository(ProductsDataSource remoteProductsDataSource, ProductsDataSource localProductsDataSource) {
         this.remoteProductsDataSource = remoteProductsDataSource;
         this.localProductsDataSource = localProductsDataSource;
     }
-
-//    public static ProductsRepository getInstance(ProductsDataSource remoteProductsDataSource,
-//                                              ProductsDataSource localProductsDataSource) {
-//
-//        return INSTANCE;
-//    }
 
     @Override
     public void getProducts(final int categoryId, final int pageItems, final LoadProductsCallback callback) {

@@ -27,7 +27,7 @@ public enum StylightClient {
         // log requests body only in debug mode
         if(BuildConfig.DEBUG) {
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            httpLoggingInterceptor.setLevel(Constants.HTTP_LOG_LEVEL);
             httpClient.addInterceptor(httpLoggingInterceptor);
         }
 

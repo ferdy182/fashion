@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.fernandofgallego.stylight.R;
-import com.fernandofgallego.stylight.model.datasource.PostsRepository;
+import com.fernandofgallego.stylight.model.datasource.TimelineRepository;
 import com.fernandofgallego.stylight.model.entities.Posts;
 import com.fernandofgallego.stylight.model.entities.Products;
 
@@ -19,7 +19,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     private RecyclerView list;
 
     public MainFragment() {
-        mainPresenter = new MainPresenter(this, PostsRepository.INSTANCE);
+        mainPresenter = new MainPresenter(this, TimelineRepository.INSTANCE);
     }
 
     public static MainFragment newInstance() {

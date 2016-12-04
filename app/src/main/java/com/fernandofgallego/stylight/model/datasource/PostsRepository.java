@@ -12,16 +12,10 @@ public enum PostsRepository implements PostsDataSource {
     private PostsDataSource remotePostsDataSource;
     private PostsDataSource localPostsDataSource;
 
-    private PostsRepository(PostsDataSource remotePostsDataSource, PostsDataSource localPostsDataSource) {
+    PostsRepository(PostsDataSource remotePostsDataSource, PostsDataSource localPostsDataSource) {
         this.remotePostsDataSource = remotePostsDataSource;
         this.localPostsDataSource = localPostsDataSource;
     }
-
-//    public static PostsRepository getInstance(PostsDataSource remotePostsDataSource,
-//                                              PostsDataSource localPostsDataSource) {
-//
-//        return INSTANCE;
-//    }
 
     @Override
     public void getPosts(final String categoryId, final int pageItems, final LoadPostsCallback callback) {

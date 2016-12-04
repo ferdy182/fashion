@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
@@ -10,19 +11,25 @@
             android:layout_width="150dp"
             android:layout_height="250dp"
             card_view:cardCornerRadius="4dp">
-        <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image"
+        <LinearLayout android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"/>
+                android:layout_height="match_parent">
+        <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/product_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"/>
 
         <TextView
                 android:id="@+id/info_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:textAlignment="center"
                 android:maxLines="2"
+                tools:text="Blouse \n 123,95€"
                 />
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
