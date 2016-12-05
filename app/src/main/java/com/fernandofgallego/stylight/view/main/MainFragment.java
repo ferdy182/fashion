@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.fernandofgallego.stylight.R;
 import com.fernandofgallego.stylight.model.datasource.TimelineRepository;
-import com.fernandofgallego.stylight.model.entities.Posts;
-import com.fernandofgallego.stylight.model.entities.Products;
 
 public class MainFragment extends Fragment implements MainContract.View {
 
@@ -42,26 +40,6 @@ public class MainFragment extends Fragment implements MainContract.View {
     public void onResume() {
         super.onResume();
         mainPresenter.start();
-    }
-
-    @Override
-    public void showPosts(Posts posts) {
-
-    }
-
-    @Override
-    public void showProducts(Products products) {
-
-    }
-
-    @Override
-    public void showEmptyPosts() {
-
-    }
-
-    @Override
-    public void showEmptyProducts() {
-
     }
 
     @Override
